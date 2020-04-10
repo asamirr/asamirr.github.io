@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Anubis</title>
+    <link>https://example.com/</link>
+    <description>Anubis</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 11 Apr 2020 00:34:48 +0200</lastBuildDate>
+    
+    <atom:link href="https://example.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Hello babes!</title>
+      <link>https://example.com/post/hello/</link>
+      <pubDate>Sat, 11 Apr 2020 00:34:48 +0200</pubDate>
+      
+      <guid>https://example.com/post/hello/</guid>
+      <description>&lt;p&gt;bbdsdjcbdcb&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
