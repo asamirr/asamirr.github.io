@@ -6,18 +6,56 @@
     <description>Ahmed Samir (Posts)</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 11 Apr 2020 00:34:48 +0200</lastBuildDate>
+    <lastBuildDate>Mon, 13 Apr 2020 00:33:55 +0200</lastBuildDate>
     
     <atom:link href="https://asamirr.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Hello babes!</title>
-      <link>https://asamirr.github.io/post/hello/</link>
-      <pubDate>Sat, 11 Apr 2020 00:34:48 +0200</pubDate>
+      <title>Notes on AWS Fundamentals - Addressing Security Risks Week1</title>
+      <link>https://asamirr.github.io/post/aws-security-week1-notes/</link>
+      <pubDate>Mon, 13 Apr 2020 00:33:55 +0200</pubDate>
       
-      <guid>https://asamirr.github.io/post/hello/</guid>
-      <description>&lt;p&gt;Everything C++, python, AWS will be blogged about here.&lt;/p&gt;
+      <guid>https://asamirr.github.io/post/aws-security-week1-notes/</guid>
+      <description>&lt;p&gt;We start with discussing the &amp;ldquo;Shared Responsibility&amp;rdquo; which simply defines security at AWS. It&amp;rsquo;s split to two parts. First part is all taken care of by AWS themselves or &lt;strong&gt;AWS responsibility “Security of the Cloud”&lt;/strong&gt;. They&amp;rsquo;re concerned by the physical security of the premises and facilities or simply the infrastructure and hardware in which all of the services you&amp;rsquo;re using operates. Second part is called &lt;strong&gt;Customer responsibility “Security in the Cloud”&lt;/strong&gt;. That goes from doing the configuration work of all the services you choose to work with, to protecting your users data, to regularly applying security patches and also making use of the security services provided by AWS to secure your applications that, for example, are deployed on an EC2 instance. AWS has tools like AWS Identity and Access Management (IAM), Amazon Cognito.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;AWS Identity and Access Management (IAM)&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s say you&amp;rsquo;re a tech lead at your company and you just created an AWS account. That&amp;rsquo;s when you take advantage of IAM! As the root user, you create an account for each engineer on the team and you only provision access to specific services that you know they&amp;rsquo;ll be using as a best practice. You have other controls like how the account could be accessed (via AWS Console access or Programmatic access) and then you attach policies needed for this type of account. Not only you could give restricted access to your users but also admin access could be provisioned by you through adding a JSON document that describes it.&lt;/p&gt;
+&lt;p&gt;As an additional layer of security to accounts that have admin privileges, it&amp;rsquo;s considered a best practice to add MFA (stands for Multi-factor Authentication). It adds another verification check when you login and should be enabled for the root account and every other account with admin access. It can also be used to control to the service APIs. It&amp;rsquo;ll be a short code coming from an application like Google authenticator or a YubiKey.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Managing multiple accounts using AWS Organizations&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;One way to manage your account is to create IAM groups. We start by creating an IAM group for admin users, assign engineers to it that will need admin access to resources and from there we create more groups with each having suitable policies attached to it and assign users to them.&lt;/p&gt;
+&lt;p&gt;But what happens when you start growing as an organization and multiple accounts have to be created? Surely, there&amp;rsquo;re ways and best practices in managing  multiple accounts on AWS. You want to make sure your admins could monitor the overall activity across the accounts and that each IAM group has only the permissions they need and nothing more. You want all the accounts&amp;rsquo; bills to be rolled up to one central account so that you pay for all the used services combined. Using &lt;strong&gt;AWS Organizations&lt;/strong&gt;, you can have split groups of accounts, monitor and govern access to AWS services by policies, automate account creation, have a single payment method for all accounts and share resources across all accounts. How it works?&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;You create a &lt;strong&gt;master&lt;/strong&gt; AWS account then create an organization in the master account. It&amp;rsquo;s recommended that you keep this account free of any operational AWS resources.&lt;/li&gt;
+&lt;li&gt;Then, you could create &lt;strong&gt;Organizational Units&lt;/strong&gt;, which is simply a way to group some accounts together. Or you could create member accounts right away.&lt;/li&gt;
+&lt;li&gt;Create &lt;strong&gt;service control policies&lt;/strong&gt; to be attached to OUs and restrict actions by member accounts. A good practice is to apply SCPs to OUs instead of individual accounts and make sure that every account belongs to an OU.&lt;/li&gt;
+&lt;li&gt;Use &lt;strong&gt;AWS CloudTrail&lt;/strong&gt; in the master account to centrally track all AWS usage in the member accounts.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Additional best practices:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A great example was that you could define your application resources once on your Amazon VPC subnet and share them across your organization using the &lt;strong&gt;AWS Resource Access Manager&lt;/strong&gt; service (AWS RAM for short).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Authentication and Authorization&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;There are several use cases but I&amp;rsquo;ll mention a couple. First one is if you have an internal reporting tool hosted on AWS and only employees can login and see the reports. But your company&amp;rsquo;s employees identities are on an Active Directory. You can simply federate (put them together?) this Active Directory with &lt;strong&gt;Amazon Cognito&lt;/strong&gt;. Another use case is to have resources talking to other resources and that&amp;rsquo;s where you need to validate the permissions of your app&amp;rsquo;s resources. Let&amp;rsquo;s say you have a containerized app running on EKS and needs to make an API call to query a table in an AWS DynamoDB. You&amp;rsquo;ll need to use &lt;strong&gt;IAM Roles&lt;/strong&gt;. These are short-term credentials that you&amp;rsquo;ll need to securely validate these API calls and manage permissions for actions that your app is allowed to perform on DynamoDB tables. &lt;strong&gt;IAM Roles&lt;/strong&gt; enable you to grant resources access to data without distributing passwords or API keys and by using them you&amp;rsquo;re applying the &amp;ldquo;granting least privilege access&amp;rdquo; concept.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Creating Policies in AWS&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;We create IAM policies to users, groups or roles in order to assign permissions using the visual editor which is easier and doesn&amp;rsquo;t requiring to write JSON. You could always test your custom policy using the IAM policies simulator. IAM Policies types include:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;AWS Managed Policy&lt;/strong&gt; which is created and administered by AWS and it&amp;rsquo;s designed for most common use cases.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Customer Managed Policy&lt;/strong&gt; which you could create and administer in your account. You could try to copy an existing Managed Policy and tailor it to your environment.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Inline Policy&lt;/strong&gt; is a policy that&amp;rsquo;s embedded in an IAM identity. You can create a policy and embed it in a identity, either when you create the identity or later.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;One of the advantages to use managed policies over inline policies is &lt;strong&gt;Central change management&lt;/strong&gt;. When you change a managed policy, the change is applied to all principal entities that the policy is attached to. For example, if you want to add permission for a new AWS API, you can update the managed policy to add the permission. (If you&amp;rsquo;re using an AWS managed policy, AWS updates to the policy.) When the policy is updated, the changes are applied to all principal entities that the policy is attached to. In contrast, to change an inline policy you must individually edit each identity that contains the policy. For example, if a group and a role both contain the same inline policy, you must individually edit both principal entities in order to change that policy.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Amazon Single Sign-On&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;A service that lets you manage SSO access and user permissions across multiple AWS accounts in an AWS Organization.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Difference between Cognito User Pools and Identity Pools&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;User Pools are for user registration and authentication. A Cognito User Pool handles all of this and as a developer you just need to use the SDK to retrieve user related information.&lt;/li&gt;
+&lt;li&gt;An Identity Pool is a way to authorize your users to use the various AWS services. Like having access to an S3 bucket to upload a file. Identities could be coming from a Cognito User Pool or Facebook or Google.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Resources:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.aws.amazon.com/&#34;&gt;https://docs.aws.amazon.com/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.coursera.org/learn/aws-fundamentals-addressing-security-risk&#34;&gt;https://www.coursera.org/learn/aws-fundamentals-addressing-security-risk&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
 </description>
     </item>
     
