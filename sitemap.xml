@@ -8,12 +8,27 @@
   </url>
   
   <url>
+    <loc>https://asamirr.github.io/tags/aws/</loc>
+    <lastmod>2020-04-13T23:00:44+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://asamirr.github.io/tags/cloud/</loc>
+    <lastmod>2020-04-13T23:00:44+02:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://asamirr.github.io/post/aws-security-week2-notes/</loc>
     <lastmod>2020-04-13T23:00:44+02:00</lastmod>
   </url>
   
   <url>
     <loc>https://asamirr.github.io/post/</loc>
+    <lastmod>2020-04-13T23:00:44+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://asamirr.github.io/tags/</loc>
     <lastmod>2020-04-13T23:00:44+02:00</lastmod>
   </url>
   
@@ -32,10 +47,6 @@
   
   <url>
     <loc>https://asamirr.github.io/series/</loc>
-  </url>
-  
-  <url>
-    <loc>https://asamirr.github.io/tags/</loc>
   </url>
   
 </urlset>
