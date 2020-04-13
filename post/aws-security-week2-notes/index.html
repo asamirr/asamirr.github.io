@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+        
+<meta charset="utf-8">
+<meta name="HandheldFriendly" content="True">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer-when-downgrade">
+
+<title>Notes on AWS Fundamentals - Addressing Security Risks Week 2  - Ahmed Samir</title>
+<meta name="description" content="Anubis is a simple minimalist theme for Hugo blog engine.">
+
+<link rel="alternate" type="application/rss+xml" title="RSS" href="https://asamirr.github.io/rss/">
+
+<link rel="icon" type="image/x-icon" href="https://asamirr.github.io/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="https://asamirr.github.io/favicon.png">
+
+<link rel="stylesheet" href="https://asamirr.github.io/css/style.css?rnd=1586811821" />
+
+<meta property="og:title" content="Notes on AWS Fundamentals - Addressing Security Risks Week 2" />
+<meta property="og:description" content="Week 2 is all about monitoring and infrastructure security. We start by talking about network isolation and how AWS has a limited number of access points which they call endpoints that help in monitoring the network traffic. Basically an endpoint is a URL to gain access to a web service. Also, each service has a default endpoint in any region but you can use an alternate one for your API requests." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://asamirr.github.io/post/aws-security-week2-notes/" />
+<meta property="article:published_time" content="2020-04-13T23:00:44+02:00" />
+<meta property="article:modified_time" content="2020-04-13T23:00:44+02:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Notes on AWS Fundamentals - Addressing Security Risks Week 2"/>
+<meta name="twitter:description" content="Week 2 is all about monitoring and infrastructure security. We start by talking about network isolation and how AWS has a limited number of access points which they call endpoints that help in monitoring the network traffic. Basically an endpoint is a URL to gain access to a web service. Also, each service has a default endpoint in any region but you can use an alternate one for your API requests."/>
+
+
+
+
+
+
+    
+</head>
+<body>
+    <div class="container">
+        <header> 
+            
+                <h1 class="site-header">
+    <a href="https://asamirr.github.io/">Ahmed Samir</a>
+</h1>
+<nav>
+    
+    
+    <a class="" href="/about/" title="">About</a>
+    
+    <a class="" href="/tags/" title="">Tags</a>
+    
+    <a class="" href="/posts/" title="">Archive</a>
+    
+</nav>
+
+            
+        </header>
+        <main>
+            
+
+    <article class="post">
+        <header>
+            <h1>Notes on AWS Fundamentals - Addressing Security Risks Week 2</h1>
+        </header>
+        <div class="content">
+            <p>Week 2 is all about monitoring and infrastructure security. We start by talking about network isolation and how AWS has a limited number of access points which they call <strong>endpoints</strong> that help in monitoring the network traffic. Basically an <strong>endpoint</strong> is a URL to gain access to a web service. Also, each service has a default endpoint in any region but you can use an alternate one for your API requests. That means if a service supports regions, the resources in each region are independent of similar resources in other regions.</p>
+<p>AWS offers <strong>Virtual Private Cloud</strong> service to provide you with an isolated private network in the cloud. It uses IP address spaces that are allocated by you. You also have the ability to connect your on-premises environment with AWS VPC using services like <strong>IPSec tunnel</strong> and <strong>AWS Direct Connect</strong>.</p>
+<p>The instructor explained the concept behind VPC in a really cool way. He thought of it as building a fort and we need to build hives inside of it. The fort being VPC and the hives could be anything like an EC2 instance or an RDS cluster. So if I want that EC2 instance to be accessible, I&rsquo;ll put in a <strong>public subnet</strong>. A subnet is just a logical subdivision of our IPs. This is done via network access control lists or <strong>NACLs</strong>. These lists contain IPs, which are allowed or denied access to the subnet. They are also stateless, so if you allow something in, you must explicitly allow it out via a rule. Now keep in mind that these rules are stateless. Meaning that you have to be specific with your outbound rule if you want your traffic to return.</p>
+<p>Regarding the RDS cluster, you don&rsquo;t want that to be accessible through the internet. So you&rsquo;ll have to put it in a private subnet so it won&rsquo;t be visible to anyone. Now say you&rsquo;re going the extra mile and want to make sure that EC2 instance is really safe. You could create a security group for it acting just like firewalls to control both inbound and outbound traffic to that instance.</p>
+<p>But things are way uglier out there in the real world and aren&rsquo;t just safe. If we have more than a VPC and need them to communicate together, it&rsquo;ll be tricky when you send your traffic out there unsecured. That&rsquo;s AWS features like <strong>VPC Endpoints</strong> or <strong>Private Links</strong> come in handy! They&rsquo;re simply establishing a private secure endpoint between one VPC and another so that they don&rsquo;t leave your private network.</p>
+<p>Each VPC comes with a default main route table. <strong>Route Tables</strong> are a set of routes that determine where the traffic is directed. Every subnet has to be associated with a route table, the main one or a custom one that you created.</p>
+<h2 id="auditing-on-aws"><strong>Auditing on AWS</strong></h2>
+<p>First service used in auditing is <strong>AWS CloudTrail</strong>. It enables you to track API calls, SDKs, CLI tools and other AWS services too. It lets you know who&rsquo;s interacting with the infrastructure in your system and trace activity for the past 90 days via console.</p>
+<p>Next service is a really cool one and it&rsquo;s <strong>AWS Config</strong>. It&rsquo;s pretty obvious from it&rsquo;s name that it&rsquo;s all about your configuration management. Config enables you to see every configuration made to any services your team is using across AWS and notifies you with any changes done. You could also tie it to CloudTrail and see who changed what and when. You could even have it execute a Lambda function to go and change it back to what it was before whoever changed it.</p>
+<p>Third one is <strong>Amazon Inspector</strong> which runs an automated security assessment and check on anything not up to standards or vulnerabilities. At the end of the assessment, it generates its findings in the Inspector console with description of each finding and a recommendation on how to fix it.</p>
+<p>Last one is <strong>Trusted Advisor</strong>. It provides you with real time guidance to help you provision your resources following AWS best practices. You run it and it generates a report about 5 categories cost optimization, performance, security, fault tolerance, and service limits. Each category will produce traffic light-based recommendations.</p>
+<h2 id="monitoring-on-aws"><strong>Monitoring on AWS</strong></h2>
+<p>First service available is <strong>CloudWatch</strong>. Simply it&rsquo;s like having someone keep an eye on a service and provide metrics about so that later you could retrieve and review it. You could also fire up an alarm so when a certain metric exceeds a threshold you set up and performs some actions based on the value of the metric. For example, you can use CloudTrail to monitor activity related to changing an EC2 security group, and trigger an Amazon CloudWatch alarm when configuration changes happen. Also, <strong>CloudWatch Logs</strong> is a helpful tool to store and access log files from different services. Like archiving log data from S3 in CloudWatch Logs or collecting and storing application logs.</p>
+<p>Another two cool tools that usually are used together <strong>Amazon GuardDuty</strong> and <strong>Amazon Security Hub</strong>. Let&rsquo;s start with GuardDuty. A service that uses machine learning and anomaly detection to identify any malicious or unauthorized behavior in your account. It analyzes billions of events from your AWS resources like CloudTrail and VPC Flow Logs. You can also integrate GuardDuty with AWS CloudWatch Events or your current event management system to alert your security team. It provides three severity levels: low, medium, and high to help you prioritize responses to potential threats.</p>
+<p>We&rsquo;re done with identifying and capturing these threats. Now it&rsquo;s time to respond and luckily GuardDuty offers solutions like HTTPS APIs and <strong>Amazon CloudWatch Events</strong> to support automated responses to these findings.</p>
+<p>Now you&rsquo;re asking where can I find and look at all these security findings that were harvested from all of my accounts. With <strong>Amazon Security Hub</strong> you have a single place where all of your security findings are organized and prioritized for you. They&rsquo;re visually summarized in dashboards.</p>
+<p>Resources:</p>
+<ol>
+<li><a href="https://docs.aws.amazon.com/">https://docs.aws.amazon.com/</a></li>
+<li><a href="https://www.coursera.org/learn/aws-fundamentals-addressing-security-risk">https://www.coursera.org/learn/aws-fundamentals-addressing-security-risk</a></li>
+</ol>
+
+        </div>
+        <div class="article-info">
+    
+        <div class="article-date">2020-04-13</div>
+    
+    <div class="article-taxonomies">
+        
+            
+    </div>
+</div>
+
+    </article>
+    
+
+
+        </main>
+        <footer>
+            
+                <p>© Dmitry Kolosov, 2020<br>
+Powered by <a target="_blank" href="https://gohugo.io/">Hugo</a>, theme <a target="_blank" href="https://github.com/mitrichius/hugo-theme-anubis">Anubis</a>.
+</p>
+            
+        </footer>
+    </div>
+</body>
+</html>
