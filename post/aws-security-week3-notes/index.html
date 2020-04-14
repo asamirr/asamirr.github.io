@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+        
+<meta charset="utf-8">
+<meta name="HandheldFriendly" content="True">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer-when-downgrade">
+
+<title>Notes on AWS Fundamentals - Addressing Security Risks Week 3  - Ahmed Samir</title>
+<meta name="description" content="Anubis is a simple minimalist theme for Hugo blog engine.">
+
+<link rel="alternate" type="application/rss+xml" title="RSS" href="https://asamirr.github.io/rss/">
+
+<link rel="icon" type="image/x-icon" href="https://asamirr.github.io/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="https://asamirr.github.io/favicon.png">
+
+<link rel="stylesheet" href="https://asamirr.github.io/css/style.css?rnd=1586898316" />
+
+<meta property="og:title" content="Notes on AWS Fundamentals - Addressing Security Risks Week 3" />
+<meta property="og:description" content="In week 3, we delve right into encryption and data protection. We start by revisiting the concept of &ldquo;least privileged access&rdquo; and how it is important to provide minimum permissions for users of your resources. These users could be infra users or even other AWS services. For example, a lambda function that pulls out data from an S3 bucket should have Read Only access to prevent data exposure to the unauthorized." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://asamirr.github.io/post/aws-security-week3-notes/" />
+<meta property="article:published_time" content="2020-04-14T22:40:11+02:00" />
+<meta property="article:modified_time" content="2020-04-14T22:40:11+02:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Notes on AWS Fundamentals - Addressing Security Risks Week 3"/>
+<meta name="twitter:description" content="In week 3, we delve right into encryption and data protection. We start by revisiting the concept of &ldquo;least privileged access&rdquo; and how it is important to provide minimum permissions for users of your resources. These users could be infra users or even other AWS services. For example, a lambda function that pulls out data from an S3 bucket should have Read Only access to prevent data exposure to the unauthorized."/>
+
+
+
+
+
+
+    
+</head>
+<body>
+    <div class="container">
+        <header> 
+            
+                <h1 class="site-header">
+    <a href="https://asamirr.github.io/">Ahmed Samir</a>
+</h1>
+<nav>
+    
+    
+    <a class="" href="/about/" title="">About</a>
+    
+    <a class="" href="/tags/" title="">Tags</a>
+    
+    <a class="" href="/post/" title="">Archive</a>
+    
+</nav>
+
+            
+        </header>
+        <main>
+            
+
+    <article class="post">
+        <header>
+            <h1>Notes on AWS Fundamentals - Addressing Security Risks Week 3</h1>
+        </header>
+        <div class="content">
+            <p>In week 3, we delve right into encryption and data protection. We start by revisiting the concept of &ldquo;least privileged access&rdquo; and how it is important to provide minimum permissions for users of your resources. These users could be infra users or even other AWS services. For example, a lambda function that pulls out data from an S3 bucket should have Read Only access to prevent data exposure to the unauthorized.</p>
+<p>Then we go into data types and how often do we access it. For each data type you have, there&rsquo;s a complimentary AWS service for it to be stored effectively. So let&rsquo;s you have objects to store or even log files, you could store them in an <strong>AWS S3</strong> bucket. If you don&rsquo;t need this data in a hurry, you could just dump it in <strong>Amazon Glacier</strong> to lower your costs even more. A good practice to follow is to set up lifecycle policies for your data in S3 to be backed up after a certain time and moved to Glacier.</p>
+<p>You&rsquo;ll also to store data for your application. For that you might need <strong>Amazon RDS</strong> which is a relational database solution that comes with several server options like MySQL and Postgres. Other applications don&rsquo;t really follow the relational model for storing data so you might want to check out <strong>Amazon DynamoDB</strong> for a NoSQL database which is so much faster than a relational database. You could attach <strong>DynamoDB Accelerator</strong> to your DynamoDB tables, which is an in-memory cache that lower the response time to microseconds.</p>
+<p>For data generated from our EC2 instances, there are <strong>AWS Elastic Block Store</strong> and <strong>Elastic File System</strong>. For EC2 instances, if you shut them down you&rsquo;ll lose everything that was on it. But if you attach an EBS volume to it, you could always retain the data that was on that instance. EFS is helpful if you need a file system for your instance and it can automatically grow and shrink depending on the amount of files you have.</p>
+<p>There&rsquo;s <strong>AWS Redshift</strong> for secure data warehousing. Mix it with the ability of parallel query execution and you&rsquo;ll see wonders! You could also access data in S3 via <strong>Redshift Spectrum</strong> allowing you to query on more data and get up-to-date results. If you&rsquo;re too lazy for Redshift, you could go for <strong>Amazon Athena</strong> which allows you to run SQL queries on data stored in S3.</p>
+<h2 id="encrypting-data-in-transit"><strong>Encrypting Data in Transit</strong></h2>
+<p>First, you have to categorize your data based on levels of sensitivity. Then, you apply encryption standards for each category. You also need to authenticate network communications including verifying the identity of communications by using a protocol like <strong>TLS</strong> or <strong>IPSec</strong> (IPSec is a protocol for intrinsic data protection between host). IPSec is a protocol to protect communication at the network layer which is layer three of the OS I model. TLS is used for encrypting information at the transport layer which is layer four of the OSI model. TLS is the successor protocol to SSL. TLS is an improved version of SSL. It works in much the same way as the SSL, using encryption to protect the transfer of data and information.</p>
+<p>You should use HTTPS instead of HTTP for data transmission to prevent eavesdropping, unauthorized alterations, and unauthorized copying of your data. SSL and TLS use X.509 certificate to authenticate the server. You want to make sure you store X.509 certificates securely and rotate them with strict access control. That could be handled by <strong>AWS Certificate Manager</strong>.</p>
+<h2 id="encrypting-data-in-rest"><strong>Encrypting Data in Rest</strong></h2>
+<p>The concept of <em>Encryption at Rest</em> could be demonstrated by imagining you have a locked safe in your house, you have the key to unlock it anytime and you have it on you wherever you go. AWS has you covered in that case. There are services that give you lets you create and manage your keys or you could choose to have AWS manage it for you and generate new keys regularly.</p>
+<p><strong>Amazon Key Management Service</strong> is our first one here and it helps you create and control *customer master keys *, the encryption keys used to encrypt your data. When creating it, you define key usage permissions. That means you pick users and roles who are allowed to use it and perform any encryption/decryption on your data.</p>
+<h2 id="database-encryption"><strong>Database Encryption</strong></h2>
+<p>Now we talk about how we encrypt our data and secure it. By default, you probably know that most of the times databases are stored in a private subnet. For you to send get there, you&rsquo;ll have to send a request which will be received by a load balancer and then distributed to one of the web servers. After it&rsquo;s validated, it&rsquo;ll be sent to an internal load balancer inside the VPC and then distributed to the application servers. Then, the servers will talk with the database to get info about your request and see if it should return the data you&rsquo;re requesting or not.</p>
+<p>Here&rsquo;s a visual demonstration for better understanding:</p>
+<p><img src="http://localhost:1313/image-20200414221138118.png" alt="image-20200414221138118"></p>
+<p>But it all comes back to your data classification and levels of sensitivity. So it makes sense that encrypting data at rest is crucial if you&rsquo;re storing users&rsquo; credit card info. You could use SSL to encrypt the connection to your <strong>RDS</strong> instance for example. Enable the encryption option when you&rsquo;re first creating the RDS instance, your instance gets armored with AES-256 encryption algorithm and your data is encrypted and ready to fight!</p>
+<p>Of course it must&rsquo;ve struck your head by now that the keys you&rsquo;ll use to encrypt/decrypt data on your RDS instance will be managed by <strong>AWS KMS</strong>. That&rsquo;s what it was built for yes!!</p>
+<p>If you&rsquo;re using a NoSQL database or DynamoDB, don&rsquo;t worry because encryption is enabled by default to your DynamoDB tables and can&rsquo;t be disabled.</p>
+<h2 id="securing-of-s3"><strong>Securing of S3</strong></h2>
+<p>For starters, things like only allowing bucket access to authorized parties or disabling public access for the bucket should be considered. But it&rsquo;s recommended that you enable default encryption on your S3 bucket encrypting all of your bucket&rsquo;s objects.</p>
+<p>Another lazy option would be <strong>Amazon Macie</strong>. Macie uses machine learning to automatically discover, classify, and protect sensitive data in AWS. Automatically recognizing your sensitive data and providing you with alerts and giving you insights on how the data is managed and accessed.</p>
+<h2 id="encrypting-data-on-ebs"><strong>Encrypting Data on EBS</strong></h2>
+<p>To encrypt data on an EBS volume, you configure your account to enable encryption on all your EBS volumes upon creation. One of EBS&rsquo;s features is that it backups up data to S3 taking snapshots. Snapshots are a point-in-time copy of your EBS volume. If you have encryption enabled, these snapshots will be encrypted as well. EBS encryption enables data at rest security by encrypting your data volumes, boot volumes and snapshots using Amazon-managed keys or keys you create and manage using the AWS Key Management Service (KMS). In addition, the encryption occurs on the servers that host EC2 instances, providing encryption of data as it moves between EC2 instances and EBS data and boot volumes.</p>
+<p>Resources:</p>
+<ol>
+<li><a href="https://docs.aws.amazon.com/">https://docs.aws.amazon.com/</a></li>
+<li><a href="https://www.coursera.org/learn/aws-fundamentals-addressing-security-risk">https://www.coursera.org/learn/aws-fundamentals-addressing-security-risk</a></li>
+</ol>
+
+        </div>
+        <div class="article-info">
+    
+        <div class="article-date">2020-04-14</div>
+    
+    <div class="article-taxonomies">
+        
+            
+                <ul class="article-tags">
+                    
+                        <li><a href="https://asamirr.github.io/tags/aws">#aws</a></li>
+                    
+                        <li><a href="https://asamirr.github.io/tags/cloud">#cloud</a></li>
+                    
+                </ul>
+        
+    </div>
+</div>
+
+    </article>
+    
+
+
+        </main>
+        <footer>
+            
+                <p>© Dmitry Kolosov, 2020<br>
+Powered by <a target="_blank" href="https://gohugo.io/">Hugo</a>, theme <a target="_blank" href="https://github.com/mitrichius/hugo-theme-anubis">Anubis</a>.
+</p>
+            
+        </footer>
+    </div>
+</body>
+</html>
