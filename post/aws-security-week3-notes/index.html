@@ -16,7 +16,7 @@
 <link rel="icon" type="image/x-icon" href="https://asamirr.github.io/favicon.ico">
 <link rel="apple-touch-icon-precomposed" href="https://asamirr.github.io/favicon.png">
 
-<link rel="stylesheet" href="https://asamirr.github.io/css/style.css?rnd=1586898316" />
+<link rel="stylesheet" href="https://asamirr.github.io/css/style.css?rnd=1586956009" />
 
 <meta property="og:title" content="Notes on AWS Fundamentals - Addressing Security Risks Week 3" />
 <meta property="og:description" content="In week 3, we delve right into encryption and data protection. We start by revisiting the concept of &ldquo;least privileged access&rdquo; and how it is important to provide minimum permissions for users of your resources. These users could be infra users or even other AWS services. For example, a lambda function that pulls out data from an S3 bucket should have Read Only access to prevent data exposure to the unauthorized." />
@@ -78,7 +78,7 @@
 <h2 id="database-encryption"><strong>Database Encryption</strong></h2>
 <p>Now we talk about how we encrypt our data and secure it. By default, you probably know that most of the times databases are stored in a private subnet. For you to send get there, you&rsquo;ll have to send a request which will be received by a load balancer and then distributed to one of the web servers. After it&rsquo;s validated, it&rsquo;ll be sent to an internal load balancer inside the VPC and then distributed to the application servers. Then, the servers will talk with the database to get info about your request and see if it should return the data you&rsquo;re requesting or not.</p>
 <p>Here&rsquo;s a visual demonstration for better understanding:</p>
-<p><img src="http://localhost:1313/image-20200414221138118.png" alt="image-20200414221138118"></p>
+<p><img src="static/image-20200414221138118.png" alt="image-20200414221138118"></p>
 <p>But it all comes back to your data classification and levels of sensitivity. So it makes sense that encrypting data at rest is crucial if you&rsquo;re storing users&rsquo; credit card info. You could use SSL to encrypt the connection to your <strong>RDS</strong> instance for example. Enable the encryption option when you&rsquo;re first creating the RDS instance, your instance gets armored with AES-256 encryption algorithm and your data is encrypted and ready to fight!</p>
 <p>Of course it must&rsquo;ve struck your head by now that the keys you&rsquo;ll use to encrypt/decrypt data on your RDS instance will be managed by <strong>AWS KMS</strong>. That&rsquo;s what it was built for yes!!</p>
 <p>If you&rsquo;re using a NoSQL database or DynamoDB, don&rsquo;t worry because encryption is enabled by default to your DynamoDB tables and can&rsquo;t be disabled.</p>
