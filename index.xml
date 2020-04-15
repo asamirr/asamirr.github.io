@@ -6,10 +6,41 @@
     <description>Ahmed Samir</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 14 Apr 2020 22:40:11 +0200</lastBuildDate>
+    <lastBuildDate>Wed, 15 Apr 2020 15:17:10 +0200</lastBuildDate>
     
     <atom:link href="https://asamirr.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Notes on AWS Fundamentals - Addressing Security Risks Week 4</title>
+      <link>https://asamirr.github.io/post/aws-security-week4-notes/</link>
+      <pubDate>Wed, 15 Apr 2020 15:17:10 +0200</pubDate>
+      
+      <guid>https://asamirr.github.io/post/aws-security-week4-notes/</guid>
+      <description>&lt;p&gt;It&amp;rsquo;s all coming to an end now with the last week. It&amp;rsquo;s more about your end of security. Securing your application to be specific and your compute resources. We start by talking about best practices to securing your &lt;strong&gt;EC2 instances&lt;/strong&gt;. Some of them are:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;You can leverage security groups as the primary mechanism for controlling network access to EC2 network interfaces.&lt;/li&gt;
+&lt;li&gt;Restrict access at the network and the OS layer.&lt;/li&gt;
+&lt;li&gt;Use &lt;strong&gt;Network ACLs&lt;/strong&gt; which operate at the subnet level and evaluate traffic entering and exiting a subnet.&lt;/li&gt;
+&lt;li&gt;Use &lt;strong&gt;IAM roles&lt;/strong&gt; to grant permissions for the instance to make API calls to other services.&lt;/li&gt;
+&lt;li&gt;Enabling &lt;strong&gt;AWS CloudTrail&lt;/strong&gt; to capture API calls which will enable &lt;strong&gt;AWS Config&lt;/strong&gt; to audit and track changes made to your EC2 resources.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Now if you choose to run your app in a Docker container, you could use services like &lt;strong&gt;Amazon Elastic Container Service&lt;/strong&gt;, &lt;strong&gt;Elastic Container Service&lt;/strong&gt; for Kubernetes and &lt;strong&gt;AWS Fargate&lt;/strong&gt;. ECS, EKS, and Fargate let you use IAM roles to control requests from the application running on containers to other AWS services. To retrieve something stored on S3, your containerized application that run on ECS needs permission to read that thing in S3. That&amp;rsquo;s done by creating an IAM role and attaching it to the container.&lt;/p&gt;
+&lt;p&gt;Last compute resource option is &lt;strong&gt;AWS Lambda&lt;/strong&gt;. Lambda automatically runs your code without requiring you to provision or manage servers. So you&amp;rsquo;re not responsible to for the security of any of this. However, you are responsible for the securing your code and storage.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Protecting the Endpoints&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;After a while, from starting with a single EC2 instance, your instances will increase as you grow. To manage traffic across your instances, we use &lt;strong&gt;Elastic Load Balancing&lt;/strong&gt; service. There&amp;rsquo;re are two types, &lt;strong&gt;Network Load Balancer&lt;/strong&gt; and &lt;strong&gt;Application Load Balancer&lt;/strong&gt;. In our case, we&amp;rsquo;re using NLB. It uses a round-robin algorithm to distribute traffic order between these instances.&lt;/p&gt;
+&lt;p&gt;A best practice of securing traffic to your EC2 instances, is to route the encrypted traffic to our NLB, terminate the HTTPS traffic on it (or simply decrypting it) and then send it to the instance.&lt;/p&gt;
+&lt;p&gt;Another way of securing our app, is only exposing certain logic in our APIs via &lt;strong&gt;REST&lt;/strong&gt; or &lt;strong&gt;Websockets&lt;/strong&gt;. That could be done by the help from &lt;strong&gt;API Gateway&lt;/strong&gt; service. It allows you to create, publish, secure APIs at any scale.&lt;/p&gt;
+&lt;p&gt;API Gateway could be secured using &lt;strong&gt;custom Lambda authorizers&lt;/strong&gt; which are just Lambda functions. These authorizers determine access to an API using bearer token strategy such as OAuth. What happens is that you configure a Lambda authorizer, API Gateway calls the Lambda function with incoming authorization token and depending on the strategy you implemented, it will return IAM policies, which are used to authorize the request. If the policy returned by the authorizer is valid, API Gateway will then cache the policy associated with the incoming token for up to 1 hour.&lt;/p&gt;
+&lt;h2 id=&#34;managing-secrets&#34;&gt;&lt;strong&gt;Managing Secrets&lt;/strong&gt;&lt;/h2&gt;
+&lt;p&gt;Database credentials, API keys, passwords are all considered to be secret. That&amp;rsquo;s why you shouldn&amp;rsquo;t store or log them by any means. &lt;strong&gt;AWS Secrets Manager service&lt;/strong&gt; helps you achieve just that. It&amp;rsquo;s a centralized storage and provides you with direct access.&lt;/p&gt;
+&lt;p&gt;Resources:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.aws.amazon.com/&#34;&gt;https://docs.aws.amazon.com/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.coursera.org/learn/aws-fundamentals-addressing-security-risk&#34;&gt;https://www.coursera.org/learn/aws-fundamentals-addressing-security-risk&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+    </item>
     
     <item>
       <title>Notes on AWS Fundamentals - Addressing Security Risks Week 3</title>

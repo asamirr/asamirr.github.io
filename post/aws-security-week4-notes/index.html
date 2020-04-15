@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+        
+<meta charset="utf-8">
+<meta name="HandheldFriendly" content="True">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer-when-downgrade">
+
+<title>Notes on AWS Fundamentals - Addressing Security Risks Week 4  - Ahmed Samir</title>
+<meta name="description" content="Anubis is a simple minimalist theme for Hugo blog engine.">
+
+<link rel="alternate" type="application/rss+xml" title="RSS" href="https://asamirr.github.io/rss/">
+
+<link rel="icon" type="image/x-icon" href="https://asamirr.github.io/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="https://asamirr.github.io/favicon.png">
+
+<link rel="stylesheet" href="https://asamirr.github.io/css/style.css?rnd=1586957073" />
+
+<meta property="og:title" content="Notes on AWS Fundamentals - Addressing Security Risks Week 4" />
+<meta property="og:description" content="It&rsquo;s all coming to an end now with the last week. It&rsquo;s more about your end of security. Securing your application to be specific and your compute resources. We start by talking about best practices to securing your EC2 instances. Some of them are:
+ You can leverage security groups as the primary mechanism for controlling network access to EC2 network interfaces. Restrict access at the network and the OS layer." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://asamirr.github.io/post/aws-security-week4-notes/" />
+<meta property="article:published_time" content="2020-04-15T15:17:10+02:00" />
+<meta property="article:modified_time" content="2020-04-15T15:17:10+02:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Notes on AWS Fundamentals - Addressing Security Risks Week 4"/>
+<meta name="twitter:description" content="It&rsquo;s all coming to an end now with the last week. It&rsquo;s more about your end of security. Securing your application to be specific and your compute resources. We start by talking about best practices to securing your EC2 instances. Some of them are:
+ You can leverage security groups as the primary mechanism for controlling network access to EC2 network interfaces. Restrict access at the network and the OS layer."/>
+
+
+
+
+
+
+    
+</head>
+<body>
+    <div class="container">
+        <header> 
+            
+                <h1 class="site-header">
+    <a href="https://asamirr.github.io/">Ahmed Samir</a>
+</h1>
+<nav>
+    
+    
+    <a class="" href="/about/" title="">About</a>
+    
+    <a class="" href="/tags/" title="">Tags</a>
+    
+    <a class="" href="/post/" title="">Archive</a>
+    
+</nav>
+
+            
+        </header>
+        <main>
+            
+
+    <article class="post">
+        <header>
+            <h1>Notes on AWS Fundamentals - Addressing Security Risks Week 4</h1>
+        </header>
+        <div class="content">
+            <p>It&rsquo;s all coming to an end now with the last week. It&rsquo;s more about your end of security. Securing your application to be specific and your compute resources. We start by talking about best practices to securing your <strong>EC2 instances</strong>. Some of them are:</p>
+<ul>
+<li>You can leverage security groups as the primary mechanism for controlling network access to EC2 network interfaces.</li>
+<li>Restrict access at the network and the OS layer.</li>
+<li>Use <strong>Network ACLs</strong> which operate at the subnet level and evaluate traffic entering and exiting a subnet.</li>
+<li>Use <strong>IAM roles</strong> to grant permissions for the instance to make API calls to other services.</li>
+<li>Enabling <strong>AWS CloudTrail</strong> to capture API calls which will enable <strong>AWS Config</strong> to audit and track changes made to your EC2 resources.</li>
+</ul>
+<p>Now if you choose to run your app in a Docker container, you could use services like <strong>Amazon Elastic Container Service</strong>, <strong>Elastic Container Service</strong> for Kubernetes and <strong>AWS Fargate</strong>. ECS, EKS, and Fargate let you use IAM roles to control requests from the application running on containers to other AWS services. To retrieve something stored on S3, your containerized application that run on ECS needs permission to read that thing in S3. That&rsquo;s done by creating an IAM role and attaching it to the container.</p>
+<p>Last compute resource option is <strong>AWS Lambda</strong>. Lambda automatically runs your code without requiring you to provision or manage servers. So you&rsquo;re not responsible to for the security of any of this. However, you are responsible for the securing your code and storage.</p>
+<p><strong>Protecting the Endpoints</strong></p>
+<p>After a while, from starting with a single EC2 instance, your instances will increase as you grow. To manage traffic across your instances, we use <strong>Elastic Load Balancing</strong> service. There&rsquo;re are two types, <strong>Network Load Balancer</strong> and <strong>Application Load Balancer</strong>. In our case, we&rsquo;re using NLB. It uses a round-robin algorithm to distribute traffic order between these instances.</p>
+<p>A best practice of securing traffic to your EC2 instances, is to route the encrypted traffic to our NLB, terminate the HTTPS traffic on it (or simply decrypting it) and then send it to the instance.</p>
+<p>Another way of securing our app, is only exposing certain logic in our APIs via <strong>REST</strong> or <strong>Websockets</strong>. That could be done by the help from <strong>API Gateway</strong> service. It allows you to create, publish, secure APIs at any scale.</p>
+<p>API Gateway could be secured using <strong>custom Lambda authorizers</strong> which are just Lambda functions. These authorizers determine access to an API using bearer token strategy such as OAuth. What happens is that you configure a Lambda authorizer, API Gateway calls the Lambda function with incoming authorization token and depending on the strategy you implemented, it will return IAM policies, which are used to authorize the request. If the policy returned by the authorizer is valid, API Gateway will then cache the policy associated with the incoming token for up to 1 hour.</p>
+<h2 id="managing-secrets"><strong>Managing Secrets</strong></h2>
+<p>Database credentials, API keys, passwords are all considered to be secret. That&rsquo;s why you shouldn&rsquo;t store or log them by any means. <strong>AWS Secrets Manager service</strong> helps you achieve just that. It&rsquo;s a centralized storage and provides you with direct access.</p>
+<p>Resources:</p>
+<ol>
+<li><a href="https://docs.aws.amazon.com/">https://docs.aws.amazon.com/</a></li>
+<li><a href="https://www.coursera.org/learn/aws-fundamentals-addressing-security-risk">https://www.coursera.org/learn/aws-fundamentals-addressing-security-risk</a></li>
+</ol>
+
+        </div>
+        <div class="article-info">
+    
+        <div class="article-date">2020-04-15</div>
+    
+    <div class="article-taxonomies">
+        
+            
+                <ul class="article-tags">
+                    
+                        <li><a href="https://asamirr.github.io/tags/aws">#aws</a></li>
+                    
+                        <li><a href="https://asamirr.github.io/tags/cloud">#cloud</a></li>
+                    
+                </ul>
+        
+    </div>
+</div>
+
+    </article>
+    
+
+
+        </main>
+        <footer>
+            
+                <p>© Dmitry Kolosov, 2020<br>
+Powered by <a target="_blank" href="https://gohugo.io/">Hugo</a>, theme <a target="_blank" href="https://github.com/mitrichius/hugo-theme-anubis">Anubis</a>.
+</p>
+            
+        </footer>
+    </div>
+</body>
+</html>
